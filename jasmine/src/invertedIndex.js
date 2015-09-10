@@ -31,13 +31,11 @@ HashTable.prototype.setItem = function(key, index) {
       hecks is the value passed is also in the hastable
       if true push only the index on the file where the term was found
       */
-    if (this.hasItem(key) && this.items[key] === index) {
-        this.items[key].push(index);
-
+    if (this.hasItem(key) && this.items[key] ==index) {
+        console.log('index already exist');
         // if it has the term but the not from the same file 
         // if it is true then push the file and the index where the file was found
-
-    } else if (this.hasItem(key) && this.items[key] !== index) {
+    } else  if (this.hasItem(key) && this.items[key] !== index) {
         this.items[key].push(index);
 
         // if the term is not in the hashtable
@@ -78,11 +76,11 @@ HashTable.prototype.getValues = function() {
 
 /* 
  * This function receives an array of all words and returns an
- * array of only keywords excluding conjusctions
+ * array of only keywords excluding conjuctions
  */
 
 HashTable.prototype.getKeyWords = function(textContent) {
-    var conjunctions = ['of', 'the', 'in', 'and', 'an', 'in', 'a', 'to','into'],
+    var conjunctions = ['of', 'the', 'in', 'and', 'an', 'in', 'a', 'to','into',''],
         finalArray = [];
 
     for (var i = 0; i < textContent.length; i++) {
@@ -113,6 +111,7 @@ HashTable.prototype.readFile = function(callback) {
     Xmlhttp.send(null);
 };
 
+
 // function createIndex
 // this function will populate our hashtable with indexes
 HashTable.prototype.createIndex = function(obj) {
@@ -138,6 +137,10 @@ var Books = JSON.parse(localStorage.getItem('Books'));
 hash.createIndex(Books);
 
 console.log(hash.getKeys());
+
+
+
+
 
 
 
