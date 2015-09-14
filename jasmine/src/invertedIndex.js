@@ -31,11 +31,11 @@ HashTable.prototype.setItem = function(key, index) {
       hecks is the value passed is also in the hastable
       if true push only the index on the file where the term was found
       */
-    if (this.hasItem(key) && this.items[key] ==index) {
+    if (this.hasItem(key) && this.items[key] == index) {
         console.log('index already exist');
         // if it has the term but the not from the same file 
         // if it is true then push the file and the index where the file was found
-    } else  if (this.hasItem(key) && this.items[key] !== index) {
+    } else if (this.hasItem(key) && this.items[key] !== index) {
         this.items[key].push(index);
 
         // if the term is not in the hashtable
@@ -80,7 +80,7 @@ HashTable.prototype.getValues = function() {
  */
 
 HashTable.prototype.getKeyWords = function(textContent) {
-    var conjunctions = ['of', 'the', 'in', 'and', 'an', 'in', 'a', 'to','into',''],
+    var conjunctions = ['of', 'the', 'in', 'and', 'an', 'in', 'a', 'to', 'into', ''],
         finalArray = [];
 
     for (var i = 0; i < textContent.length; i++) {
@@ -98,7 +98,7 @@ HashTable.prototype.readFile = function(callback) {
     var Xmlhttp = new XMLHttpRequest();
     Xmlhttp.open('GET', '../jasmine/books.json', true);
     Xmlhttp.setRequestHeader("Content-Type", "application/json");
-    
+
     Xmlhttp.onreadystatechange = function() {
         if (Xmlhttp.readyState == 4 && Xmlhttp.status == "200") {
             // Required use of an anonymous callback as .
@@ -137,11 +137,3 @@ var Books = JSON.parse(localStorage.getItem('Books'));
 hash.createIndex(Books);
 
 console.log(hash.getKeys());
-
-
-
-
-
-
-
-
