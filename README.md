@@ -44,7 +44,7 @@
 
    This method can be used used to filter the text to remove conjuctions and other irrelevant words," can be modified to your specification ". 
     ``` javascript
-      var text =  we are in the ocean of love, filtered; 
+      var text =  "we are in the ocean of love, filtered"; 
         text = text.split(' ');
         filtered = hash.getKeyWords(text);
       // will return => ['ocean','love'] 
