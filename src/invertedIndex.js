@@ -9,7 +9,7 @@ var HashTable = function() {
   /**
    * Defining the hastable class
    * This table will have the property length
-   * An an object of items to hold the the indexes 
+   * An an object of items to hold the the indexes
    */
 
   this.length = 0;
@@ -25,18 +25,14 @@ var HashTable = function() {
 };
 
 // Method setItem
-// This method will set the items into the hastable, 
+// This method will set the items into the hastable,
 // And also ensures that it does not overwrite any key or value.
-
-
+// Checks if the hastable has  the key
+// Checks if the value passed is also in the hastable
+// If true push only the index on the file where the term was found
+// If the term is not in the hashtable
+// Create a new term with the file and the index where it was found
 HashTable.prototype.setItem = function(key, index) {
-
-  // Checks if the hastable has  the key
-  // Checks if the value passed is also in the hastable
-  // If true push only the index on the file where the term was found
-  // If the term is not in the hashtable
-  // Create a new term with the file and the index where it was found
-
   if ((this.hasItem(key) && this.items[key] == index) === false) {
     if (this.hasItem(key) && this.items[key] !== index) {
       this.items[key].push(index);
@@ -60,7 +56,7 @@ HashTable.prototype.getItem = function(key) {
 // This function receives an array of all words and returns an
 // array of only keywords excluding conjuctions
 // Checks if the garbage has the element in the consjuctions array
-// 
+//
 
 HashTable.prototype.getKeyWords = function(garbage) {
   var conjunctions = ['of', 'the', 'in', 'and', 'an', 'a', 'to', 'into', 'so', ''],
@@ -76,10 +72,9 @@ HashTable.prototype.getKeyWords = function(garbage) {
 };
 
 // This function wil read the Json file
-HashTable.prototype.readFile = function(callback) {
-
+HashTable.prototype.getIndex = function(callback) {
   var Xmlhttp = new XMLHttpRequest();
-  Xmlhttp.open('GET', './books.json', true);
+  Xmlhttp.open('GET', url, true);
   Xmlhttp.setRequestHeader("Content-Type", "application/json");
 
   Xmlhttp.onreadystatechange = function() {
@@ -98,15 +93,18 @@ HashTable.prototype.readFile = function(callback) {
 // Filter the data to remove conjuctions such as  => for, as in etc
 // loop through the filtered text to generate index
 
-HashTable.prototype.createIndex = function(obj) {
-  for (var key in obj) {
-    var text = obj[key].title.concat(obj[key].text);
-    text = text.replace(/[^a-zA-Z ]/g, " ").split(' ');
-    text = hash.getKeyWords(text);
-    for (var i = 0; i < text.length; i++) {
-      hash.setItem(text[i].toLowerCase(), key);
+HashTable.prototype.createIndex = function(url) {
+  hash.getIndex(function(response, url) {
+    Books = JSON.parse(response);
+    for (var key in Books) {
+      var text = Books[key].title.concat(Books[key].text);
+      text = text.replace(/[^a-zA-Z ]/g, " ").split(' ');
+      text = hash.getKeyWords(text);
+      for (var i = 0; i < text.length; i++) {
+        hash.setItem(text[i].toLowerCase(), key);
+      }
     }
-  }
+  });
 };
 
 // This function will fetch the indexes from our hashtable
@@ -116,7 +114,7 @@ HashTable.prototype.createIndex = function(obj) {
 // If one words pass it to the getItem function
 // If not loop through the resultant array and pass each element to the getItem function
 
-HashTable.prototype.getIndex = function(words) {
+HashTable.prototype.searchIndex = function(words) {
   var searchKeys, indices = [],
     term, key, index;
   if (words !== undefined) {
@@ -153,8 +151,5 @@ HashTable.prototype.getIndex = function(words) {
 // it will come with all our methods
 
 var hash = new HashTable();
-hash.readFile(function(response) {
-  Books = JSON.parse(response);
-  hash.createIndex(Books);
-});
-
+var url = './books.json';
+hash.createIndex(url);
