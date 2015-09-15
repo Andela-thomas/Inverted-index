@@ -1,16 +1,15 @@
-/*  Thomas Nyambati
-    Andela ltd
-    thomas.nyambati@andela.com
-    Inverted Index
-    JavaSript Cirriculum check point 1
-*/
+  // Thomas Nyambati
+  // Andela ltd
+  // thomas.nyambati@andela.com
+  // Inverted Index
+  // JavaSript Cirriculum check point 1
+
 
 var HashTable = function() {
-  /**
-   * Defining the hastable class
-   * This table will have the property length
-   * An an object of items to hold the the indexes
-   */
+
+   // Defining the hastable class
+   // This table will have the property length
+   // An an object of items to hold the the indexes
 
   this.length = 0;
   this.items = {};
@@ -33,7 +32,15 @@ var HashTable = function() {
 // If the term is not in the hashtable
 // Create a new term with the file and the index where it was found
 HashTable.prototype.setItem = function(key, index) {
-  if ((this.hasItem(key) && this.items[key] == index) === false) {
+  var object = this.items[key], exist = false;
+
+  for (key in object) {
+    if(object[key] === index) {
+      exist = true;
+    }
+  }
+
+  if ((this.hasItem(key) && exist === true) === false) {
     if (this.hasItem(key) && this.items[key] !== index) {
       this.items[key].push(index);
     } else {
@@ -42,6 +49,7 @@ HashTable.prototype.setItem = function(key, index) {
     }
   }
 };
+
 
 // Method getItem
 // This method return an array of file and indexex of a given term if found
@@ -63,22 +71,31 @@ HashTable.prototype.getKeyWords = function(garbage) {
     filtered = [];
 
   for (var i = 0; i < garbage.length; i++) {
-    if (conjunctions.indexOf(garbage[i].toLowerCase()) == -1) {
+    if (conjunctions.indexOf(garbage[i].toLowerCase()) === -1) {
       filtered.push(garbage[i]);
     }
   }
 
   return filtered;
 };
+// This function will fetch the terms and there index reference in the hashtable
+
+HashTable.prototype.getIndex = function() {
+    var values = [], keys;
+    for (keys in this.items) {
+        values.push(this.items[keys]);
+    }
+    return values;
+};
 
 // This function wil read the Json file
-HashTable.prototype.getIndex = function(callback) {
+HashTable.prototype.readFile = function(callback) {
   var Xmlhttp = new XMLHttpRequest();
   Xmlhttp.open('GET', url, true);
   Xmlhttp.setRequestHeader("Content-Type", "application/json");
 
   Xmlhttp.onreadystatechange = function() {
-    if (Xmlhttp.readyState == 4 && Xmlhttp.status == 200) {
+    if (Xmlhttp.readyState === 4 && Xmlhttp.status === 200) {
       var response = Xmlhttp.responseText;
       callback(response);
     }
@@ -87,17 +104,25 @@ HashTable.prototype.getIndex = function(callback) {
   Xmlhttp.send(null);
 };
 
+/*========================================================================================
+  END OF THE HASHTABLE
+=======================================================================================*/
+
+
+// create an instance of our hastable
+var hash = new HashTable();
+
 // This function will populate our hashtable with indexes
 // Combine all the property data into one
 // Filter the data to remove remover special character
 // Filter the data to remove conjuctions such as  => for, as in etc
 // loop through the filtered text to generate index
 
-HashTable.prototype.createIndex = function(url) {
-  hash.getIndex(function(response, url) {
-    Books = JSON.parse(response);
-    for (var key in Books) {
-      var text = Books[key].title.concat(Books[key].text);
+var createIndex = function(url) {
+  hash.readFile(function(response, url) {
+    books = JSON.parse(response);
+    for (var key in books) {
+      var text = books[key].title.concat(books[key].text);
       text = text.replace(/[^a-zA-Z ]/g, " ").split(' ');
       text = hash.getKeyWords(text);
       for (var i = 0; i < text.length; i++) {
@@ -105,6 +130,7 @@ HashTable.prototype.createIndex = function(url) {
       }
     }
   });
+
 };
 
 // This function will fetch the indexes from our hashtable
@@ -113,18 +139,16 @@ HashTable.prototype.createIndex = function(url) {
 // Split the words to create an array
 // If one words pass it to the getItem function
 // If not loop through the resultant array and pass each element to the getItem function
-
-HashTable.prototype.searchIndex = function(words) {
+var searchIndex = function(words) {
   var searchKeys, indices = [],
     term, key, index;
+    console.log(hash.getIndex());
   if (words !== undefined) {
     searchKeys = words.split(' ');
     if (searchKeys.length > 1) {
-
       for (key in searchKeys) {
         term = searchKeys[key];
         index = hash.getItem(term);
-
         if (index !== "Term not found") {
 
           for (key in index) {
@@ -145,11 +169,13 @@ HashTable.prototype.searchIndex = function(words) {
   } else {
     return "Please provide a search key";
   }
-}
+};
 
 // hash  will be an instance of our hashtable
 // it will come with all our methods
-
-var hash = new HashTable();
 var url = './books.json';
-hash.createIndex(url);
+var books;
+createIndex(url);
+
+
+

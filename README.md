@@ -6,8 +6,8 @@
   Inverted index  is designed to allow very fast full-text searches. 
   An inverted index consists of a list of all the unique words that appear in any document, and for each word, a list of the documents in which it appears
 #### How to use
-  1. Include `invertedIndex.js` into your html file
-  2. Create a new file or you can use the same ` invertedIndex.js` 
+  1. Include `inverted-index.js` into your html file
+  2. Create a new file or you can use the same ` inverted-index.js` 
   3. Create an instance of our *hashtable* by using the `new ` keyword
       ``` var hash = new Hashtable()```
   4. Now you can acces the HashTable functions by using the dot operator.
@@ -50,7 +50,7 @@
       // will return => ['ocean','love'] 
 
     ```
-* Creating and getting the indices ` createIndex() ` and `getIndex()`
+* Creating and getting the indices ` createIndex() ` and `searchIndex()`
 
   This methods can be used to create indices and get the indices respectively, but they have to be customized to fit one's application, for instance we used ours in a json file of Books, so feel free to doctor and play with it to  fit your application
 
